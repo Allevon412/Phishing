@@ -1,10 +1,12 @@
 **MFA and Web Security**
+
 If the adversary learns your password the adversary will not know how to obtain the MFA token. This is game over for except in the case of how web works.
 The session token needs to be stored in your web browser and will be embedded in every request.
 The adversary can steal your web token and provide it to the web server.
 The adversary can steal your token using reverse proxy simulation software such as evilginx.
 
 **Stealing the token**
+
 Cookies & local storage are ways to store session tokens. Evilginx can handle both.
 Reverse proxy phishing is a one-to-one copy of the real website, proxied dynamically in real time from the real website server.
 Phishing server is the middle-man server and will proxy outbound and inbound requests from victim and intended website.
@@ -17,6 +19,7 @@ EvilGinx will capture the session token once the victim signs into the website &
 2) setup extensions, edit this cookie, localStorageManager. setting up settings -> privacy bookmark.
 
 **Intro** 
+
 help info
 help.evilginx.com
 
@@ -107,4 +110,27 @@ og_title = 'Invoice #0045'
 Can add custom parameters to lure url in order to prefill some data about the phished user.
 ```
 lures get-url 0 email=brendan@crownehill.com name="Brendan Ortiz"
+```
+
+**Advanced Phishing**
+
+- Replacing Content
+you can replace content on the fly with evilginx when you're cloning websites by specifying the content in the subfilter section of the yaml file. An example of replacing the login button string text from " Login " to " Get Phished " is shown below:
+```
+ {triggers_on: 'akira.lab.evilginx.com', orig_sub: 'akira', domain: 'lab.evilginx.com', search: '" Login "', replace: '" Get Phished "', mimes: ['text/javascript']}
+```
+ To do this you need to identify the content you want to manipulate, then identify where the source is. In the example, the source of the login button was generated through JavaScript, so the target we need to modify in the JavaScript file the browser loads when browsing to the phish server. Then we need to identify a good regex string to use in the search parameter. Set the replace string, then finally set the mime type (can be identified through a web request / response).
+
+- Forcing POST parameters
+With forcing parameters you can modify part of a request at the behest of the victim user using evilginx. The example given is to modify the user's request to check the "Stay logged in" button so the session does not expire after 15 minutes. For documentation check https://help.evilginx.com/docs/phishlet-format#force_post
+
+```
+force_post:
+  path: '/api/v1/auth/login' #path to the login page.
+  search:
+  - {key: 'email', search: '(.*)'} #search for a request with this params
+  - {key: 'password', search: '(.*)'}
+  force:
+  - {key: 'remember_me', value: '1'} #force this value in the request.
+  type: 'post'
 ```

